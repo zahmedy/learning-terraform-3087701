@@ -22,7 +22,7 @@ resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = module.blog_new_sg.security_group_id
+  vpc_security_group_ids = module.blog-sg.security_group_id
 
   tags = {
     Name = "HelloWorld"
@@ -34,9 +34,9 @@ resource "aws_eip" "blog" {
   vpc      = true
 }
 
-module "blog_new_sg" {
+module "blog-sg" {
   source = "terraform-aws-modules/security-group/aws"
-  name = "blog-new-sg"
+  name = "blog-sg"
   vpc_id = data.aws_vpc.default.id
 
   ingress_rules     = ["http-80-tcp", "https-443-tcp"]
