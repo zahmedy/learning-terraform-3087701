@@ -29,6 +29,11 @@ resource "aws_instance" "blog" {
   }
 }
 
+resource "aws_eip" "blog" {
+  instance = aws_instance.blog.id
+  vpc      = true
+}
+
 resource "aws_security_group" "blog" {
   name = "blog-sg"
   description = "allow http and https in. Allow everything out"
