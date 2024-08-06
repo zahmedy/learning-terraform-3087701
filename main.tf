@@ -27,7 +27,7 @@ module "asg" {
   max_size = 2
 
   vpc_zone_identifier = module.blog_vpc.public_subnets
-  target_group_arns   = [module.blog_elb.elb_arn]
+  load_balancers   = [module.blog_elb.elb_id]
   security_groups = [module.blog_sg.security_group_id]
 
   image_id        = data.aws_ami.app_ami.id
@@ -64,10 +64,6 @@ module "blog_elb" {
     unhealthy_threshold = 2
     timeout             = 5
   }
-
-  // ELB attachments
-  number_of_instances = 1
-  // instances           = [aws_instance.blog.id]
 
   tags = {
     Environment = "dev"
