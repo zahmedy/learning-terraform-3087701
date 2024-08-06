@@ -62,3 +62,38 @@ module "blog_vpc" {
     Environment = "dev"
   }
 }
+
+module "blog_elb" {
+  source  = "terraform-aws-modules/elb/aws"
+
+  name = "blog-elb"
+
+  subnets         = [module.blog_vpc.public_subnets]
+  security_groups = [module.blog_sg.security_group_id]
+  internal        = false
+
+  listener = [
+    {
+      instance_port     = 80
+      instance_protocol = "HTTP"
+      lb_port           = 80
+      lb_protocol       = "HTTP"
+    }
+  ]
+
+  health_check = {
+    target              = "HTTP:80/"
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+  }
+
+  // ELB attachments
+  number_of_instances = 1
+  instances           = [aws_instance.blog.id]
+
+  tags = {
+    Environment = "dev"
+  }
+}
