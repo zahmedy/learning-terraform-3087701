@@ -31,12 +31,9 @@ module "asg" {
   security_groups = [module.blog_sg.security_group_id]
 
   image_id        = data.aws_ami.app_ami.id
-   instance_type  = var.instance_type
+  instance_type   = var.instance_type
+  traffic_source_type = module.blog_elb.name
 
-}
-
-resource "aws_eip" "blog" {
-  instance = aws_instance.blog.id
 }
 
 module "blog_sg" {
@@ -94,8 +91,8 @@ module "blog_elb" {
   }
 
   // ELB attachments
-  number_of_instances = 1
-  instances           = [aws_instance.blog.id]
+  // number_of_instances = 1
+  // instances           = [aws_instance.blog.id]
 
   tags = {
     Environment = "dev"
