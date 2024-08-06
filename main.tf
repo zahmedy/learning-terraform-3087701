@@ -33,7 +33,6 @@ resource "aws_instance" "blog" {
 
 resource "aws_eip" "blog" {
   instance = aws_instance.blog.id
-  vpc      = true
 }
 
 module "blog_sg" {
